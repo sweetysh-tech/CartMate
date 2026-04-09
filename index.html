@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -25,429 +24,426 @@
   <script type="text/babel">
     const { useState, useEffect } = React;
 
-```
-const CATEGORIES = ["Produce","Meat & Seafood","Dairy","Frozen","Bakery","Snacks","Beverages","Household","Other"];
+    const CATEGORIES = ["Produce","Meat & Seafood","Dairy","Frozen","Bakery","Snacks","Beverages","Household","Other"];
 
-const BRAND_PRESETS = [
-  { keywords: ["costco"], color: "#E31837", emoji: "🏪" },
-  { keywords: ["trader", "joe"], color: "#C8102E", emoji: "🌺" },
-  { keywords: ["aldi"], color: "#00539B", emoji: "🛒" },
-  { keywords: ["walmart"], color: "#0071CE", emoji: "🛍️" },
-  { keywords: ["target"], color: "#CC0000", emoji: "🎯" },
-  { keywords: ["whole", "foods"], color: "#00674B", emoji: "🌿" },
-  { keywords: ["kroger"], color: "#004990", emoji: "🏬" },
-  { keywords: ["safeway"], color: "#E31837", emoji: "🏪" },
-  { keywords: ["sprouts"], color: "#5E8B2C", emoji: "🥦" },
-  { keywords: ["hmart", "h mart", "h-mart"], color: "#E31837", emoji: "🇰🇷" },
-  { keywords: ["korean", "한국", "아시안", "asian"], color: "#003478", emoji: "🇰🇷" },
-  { keywords: ["japanese", "일본", "mitsuwa", "marukai"], color: "#BC002D", emoji: "🇯🇵" },
-  { keywords: ["chinese", "중국", "99 ranch", "ranch"], color: "#DE2910", emoji: "🇨🇳" },
-  { keywords: ["fresh", "freshco"], color: "#00A650", emoji: "🥬" },
-  { keywords: ["world market", "costplus"], color: "#5C3317", emoji: "🌍" },
-  { keywords: ["cvs"], color: "#CC0000", emoji: "💊" },
-  { keywords: ["walgreens"], color: "#E31837", emoji: "💊" },
-  { keywords: ["sam", "sams club"], color: "#007DC6", emoji: "🏪" },
-  { keywords: ["publix"], color: "#007744", emoji: "🏬" },
-  { keywords: ["ralphs", "ralph"], color: "#005EAA", emoji: "🏪" },
-  { keywords: ["vons"], color: "#E31837", emoji: "🛒" },
-  { keywords: ["stater"], color: "#D50032", emoji: "🏪" },
-  { keywords: ["super king"], color: "#006633", emoji: "👑" },
-  { keywords: ["lazy acres"], color: "#5E8B2C", emoji: "🌾" },
-  { keywords: ["pharmacy", "drug"], color: "#8B5CF6", emoji: "💊" },
-  { keywords: ["bakery", "bread"], color: "#D97706", emoji: "🥐" },
-  { keywords: ["butcher", "meat"], color: "#B91C1C", emoji: "🥩" },
-  { keywords: ["farmers", "farm"], color: "#65A30D", emoji: "🧺" },
-];
+    const BRAND_PRESETS = [
+      { keywords: ["costco"], color: "#E31837", emoji: "🏪" },
+      { keywords: ["trader", "joe"], color: "#C8102E", emoji: "🌺" },
+      { keywords: ["aldi"], color: "#00539B", emoji: "🛒" },
+      { keywords: ["walmart"], color: "#0071CE", emoji: "🛍️" },
+      { keywords: ["target"], color: "#CC0000", emoji: "🎯" },
+      { keywords: ["whole", "foods"], color: "#00674B", emoji: "🌿" },
+      { keywords: ["kroger"], color: "#004990", emoji: "🏬" },
+      { keywords: ["safeway"], color: "#E31837", emoji: "🏪" },
+      { keywords: ["sprouts"], color: "#5E8B2C", emoji: "🥦" },
+      { keywords: ["hmart", "h mart", "h-mart"], color: "#E31837", emoji: "🇰🇷" },
+      { keywords: ["korean", "한국", "아시안", "asian"], color: "#003478", emoji: "🇰🇷" },
+      { keywords: ["japanese", "일본", "mitsuwa", "marukai"], color: "#BC002D", emoji: "🇯🇵" },
+      { keywords: ["chinese", "중국", "99 ranch", "ranch"], color: "#DE2910", emoji: "🇨🇳" },
+      { keywords: ["fresh", "freshco"], color: "#00A650", emoji: "🥬" },
+      { keywords: ["world market", "costplus"], color: "#5C3317", emoji: "🌍" },
+      { keywords: ["cvs"], color: "#CC0000", emoji: "💊" },
+      { keywords: ["walgreens"], color: "#E31837", emoji: "💊" },
+      { keywords: ["sam", "sams club"], color: "#007DC6", emoji: "🏪" },
+      { keywords: ["publix"], color: "#007744", emoji: "🏬" },
+      { keywords: ["ralphs", "ralph"], color: "#005EAA", emoji: "🏪" },
+      { keywords: ["vons"], color: "#E31837", emoji: "🛒" },
+      { keywords: ["stater"], color: "#D50032", emoji: "🏪" },
+      { keywords: ["super king"], color: "#006633", emoji: "👑" },
+      { keywords: ["lazy acres"], color: "#5E8B2C", emoji: "🌾" },
+      { keywords: ["pharmacy", "drug"], color: "#8B5CF6", emoji: "💊" },
+      { keywords: ["bakery", "bread"], color: "#D97706", emoji: "🥐" },
+      { keywords: ["butcher", "meat"], color: "#B91C1C", emoji: "🥩" },
+      { keywords: ["farmers", "farm"], color: "#65A30D", emoji: "🧺" },
+    ];
 
-const DEFAULT_STORES = [
-  { id: "costco", name: "Costco", emoji: "🏪", color: "#E31837" },
-  { id: "traderjoes", name: "Trader Joe's", emoji: "🌺", color: "#C8102E" },
-  { id: "korean", name: "Korean Market", emoji: "🇰🇷", color: "#003478" },
-  { id: "aldi", name: "Aldi", emoji: "🛒", color: "#00539B" },
-];
+    const DEFAULT_STORES = [
+      { id: "costco", name: "Costco", emoji: "🏪", color: "#E31837" },
+      { id: "traderjoes", name: "Trader Joe's", emoji: "🌺", color: "#C8102E" },
+      { id: "korean", name: "Korean Market", emoji: "🇰🇷", color: "#003478" },
+      { id: "aldi", name: "Aldi", emoji: "🛒", color: "#00539B" },
+    ];
 
-const STORAGE_KEY = "cartmate_v4";
-const STORES_KEY = "cartmate_stores_v4";
+    const STORAGE_KEY = "cartmate_v4";
+    const STORES_KEY = "cartmate_stores_v4";
 
-const EMOJI_GROUPS = [
-  { label: "Stores", emojis: ["🏪","🏬","🛒","🛍️","🏦","🏢","🏭","🏨"] },
-  { label: "Food", emojis: ["🍎","🥦","🥩","🐟","🥛","🧀","🥚","🥐","🍞","🍜","🍣","🥗","🌽","🥕","🍇","🍓","🫐","🥑","🧅","🧄"] },
-  { label: "Drinks", emojis: ["🧃","🥤","☕","🍵","🧋","🍺","🍷","🥂","🫖","💧"] },
-  { label: "Flags", emojis: ["🇰🇷","🇯🇵","🇨🇳","🇺🇸","🇲🇽","🇮🇹","🇫🇷","🇹🇭","🇻🇳","🇮🇳"] },
-  { label: "Nature", emojis: ["🌿","🌾","🌱","🌸","🌺","🍀","🌻","🌴","🌲","🎋"] },
-  { label: "Other", emojis: ["⭐","🔥","💎","👑","🎯","💊","🧺","🎪","🎨","🏆","❤️","💚","💙","🌈","✨"] },
-];
+    const EMOJI_GROUPS = [
+      { label: "Stores", emojis: ["🏪","🏬","🛒","🛍️","🏦","🏢","🏭","🏨"] },
+      { label: "Food", emojis: ["🍎","🥦","🥩","🐟","🥛","🧀","🥚","🥐","🍞","🍜","🍣","🥗","🌽","🥕","🍇","🍓","🫐","🥑","🧅","🧄"] },
+      { label: "Drinks", emojis: ["🧃","🥤","☕","🍵","🧋","🍺","🍷","🥂","🫖","💧"] },
+      { label: "Flags", emojis: ["🇰🇷","🇯🇵","🇨🇳","🇺🇸","🇲🇽","🇮🇹","🇫🇷","🇹🇭","🇻🇳","🇮🇳"] },
+      { label: "Nature", emojis: ["🌿","🌾","🌱","🌸","🌺","🍀","🌻","🌴","🌲","🎋"] },
+      { label: "Other", emojis: ["⭐","🔥","💎","👑","🎯","💊","🧺","🎪","🎨","🏆","❤️","💚","💙","🌈","✨"] },
+    ];
 
-const FALLBACK_COLORS = ["#3D8B6F","#5A9E6F","#4A7FA5","#6B8FA3","#7B9E6B","#8B5CF6","#D97706","#0891B2","#DC2626","#059669"];
-const EXTRA_COLORS = ["#E31837","#C8102E","#00539B","#0071CE","#CC0000","#007DC6","#D97706","#8B5CF6","#DC2626","#00674B"];
+    const FALLBACK_COLORS = ["#3D8B6F","#5A9E6F","#4A7FA5","#6B8FA3","#7B9E6B","#8B5CF6","#D97706","#0891B2","#DC2626","#059669"];
+    const EXTRA_COLORS = ["#E31837","#C8102E","#00539B","#0071CE","#CC0000","#007DC6","#D97706","#8B5CF6","#DC2626","#00674B"];
 
-function detectBrand(name) {
-  const lower = name.toLowerCase();
-  for (const preset of BRAND_PRESETS) {
-    if (preset.keywords.some(kw => lower.includes(kw))) return { color: preset.color, emoji: preset.emoji };
-  }
-  return null;
-}
-
-function load(key, fallback) {
-  try { const r = localStorage.getItem(key); return r ? JSON.parse(r) : fallback; } catch { return fallback; }
-}
-function save(key, val) { try { localStorage.setItem(key, JSON.stringify(val)); } catch {} }
-
-function CartMate() {
-  const [stores, setStores] = useState(() => load(STORES_KEY, DEFAULT_STORES));
-  const [activeStore, setActiveStore] = useState(() => load(STORES_KEY, DEFAULT_STORES)[0]?.id || "costco");
-  const [allItems, setAllItems] = useState(() => load(STORAGE_KEY, {}));
-  const [view, setView] = useState("list");
-  const [form, setForm] = useState({ name: "", imageUrl: "", price: "", category: "Other" });
-  const [storeForm, setStoreForm] = useState({ name: "", emoji: "🏪", color: "#3D8B6F", autoDetected: false });
-  const [emojiGroup, setEmojiGroup] = useState("Stores");
-  const [filterCat, setFilterCat] = useState("All");
-  const [imgErrors, setImgErrors] = useState({});
-  const [deleteStoreId, setDeleteStoreId] = useState(null);
-
-  const store = stores.find(s => s.id === activeStore) || stores[0];
-  const items = allItems[activeStore] || [];
-
-  useEffect(() => { save(STORAGE_KEY, allItems); }, [allItems]);
-  useEffect(() => { save(STORES_KEY, stores); }, [stores]);
-
-  function handleStoreNameChange(name) {
-    const detected = detectBrand(name);
-    if (detected) {
-      setStoreForm(f => ({ ...f, name, color: detected.color, emoji: detected.emoji, autoDetected: true }));
-    } else {
-      setStoreForm(f => ({ ...f, name, autoDetected: false }));
+    function detectBrand(name) {
+      const lower = name.toLowerCase();
+      for (const preset of BRAND_PRESETS) {
+        if (preset.keywords.some(kw => lower.includes(kw))) return { color: preset.color, emoji: preset.emoji };
+      }
+      return null;
     }
-  }
 
-  function addItem() {
-    if (!form.name.trim()) return;
-    const newItem = { id: Date.now(), name: form.name.trim(), imageUrl: form.imageUrl.trim(), price: form.price.trim(), category: form.category, checked: false };
-    setAllItems(prev => ({ ...prev, [activeStore]: [...(prev[activeStore] || []), newItem] }));
-    setForm({ name: "", imageUrl: "", price: "", category: "Other" });
-    setView("list");
-  }
+    function load(key, fallback) {
+      try { const r = localStorage.getItem(key); return r ? JSON.parse(r) : fallback; } catch { return fallback; }
+    }
+    function save(key, val) { try { localStorage.setItem(key, JSON.stringify(val)); } catch {} }
 
-  function toggleItem(id) {
-    setAllItems(prev => ({ ...prev, [activeStore]: prev[activeStore].map(i => i.id === id ? { ...i, checked: !i.checked } : i) }));
-  }
+    function CartMate() {
+      const [stores, setStores] = useState(() => load(STORES_KEY, DEFAULT_STORES));
+      const [activeStore, setActiveStore] = useState(() => load(STORES_KEY, DEFAULT_STORES)[0]?.id || "costco");
+      const [allItems, setAllItems] = useState(() => load(STORAGE_KEY, {}));
+      const [view, setView] = useState("list");
+      const [form, setForm] = useState({ name: "", imageUrl: "", price: "", category: "Other" });
+      const [storeForm, setStoreForm] = useState({ name: "", emoji: "🏪", color: "#3D8B6F", autoDetected: false });
+      const [emojiGroup, setEmojiGroup] = useState("Stores");
+      const [filterCat, setFilterCat] = useState("All");
+      const [imgErrors, setImgErrors] = useState({});
+      const [deleteStoreId, setDeleteStoreId] = useState(null);
 
-  function deleteItem(id) {
-    setAllItems(prev => ({ ...prev, [activeStore]: prev[activeStore].filter(i => i.id !== id) }));
-  }
+      const store = stores.find(s => s.id === activeStore) || stores[0];
+      const items = allItems[activeStore] || [];
 
-  function addStore() {
-    if (!storeForm.name.trim()) return;
-    const colorToUse = storeForm.color || FALLBACK_COLORS[stores.length % FALLBACK_COLORS.length];
-    const newStore = { id: Date.now().toString(), name: storeForm.name.trim(), emoji: storeForm.emoji, color: colorToUse };
-    setStores(prev => [...prev, newStore]);
-    setActiveStore(newStore.id);
-    setStoreForm({ name: "", emoji: "🏪", color: "#3D8B6F", autoDetected: false });
-    setView("list");
-  }
+      useEffect(() => { save(STORAGE_KEY, allItems); }, [allItems]);
+      useEffect(() => { save(STORES_KEY, stores); }, [stores]);
 
-  function deleteStore(id) {
-    const updated = stores.filter(s => s.id !== id);
-    setStores(updated);
-    setAllItems(prev => { const n = { ...prev }; delete n[id]; return n; });
-    if (activeStore === id) setActiveStore(updated[0]?.id || "");
-    setDeleteStoreId(null);
-    setView("list");
-  }
+      function handleStoreNameChange(name) {
+        const detected = detectBrand(name);
+        if (detected) {
+          setStoreForm(f => ({ ...f, name, color: detected.color, emoji: detected.emoji, autoDetected: true }));
+        } else {
+          setStoreForm(f => ({ ...f, name, autoDetected: false }));
+        }
+      }
 
-  const unchecked = items.filter(i => !i.checked && (filterCat === "All" || i.category === filterCat));
-  const checked = items.filter(i => i.checked && (filterCat === "All" || i.category === filterCat));
-  const groupedUnchecked = CATEGORIES.reduce((acc, cat) => {
-    const catItems = unchecked.filter(i => i.category === cat);
-    if (catItems.length) acc[cat] = catItems;
-    return acc;
-  }, {});
-  const totalUnchecked = (allItems[activeStore] || []).filter(i => !i.checked).length;
+      function addItem() {
+        if (!form.name.trim()) return;
+        const newItem = { id: Date.now(), name: form.name.trim(), imageUrl: form.imageUrl.trim(), price: form.price.trim(), category: form.category, checked: false };
+        setAllItems(prev => ({ ...prev, [activeStore]: [...(prev[activeStore] || []), newItem] }));
+        setForm({ name: "", imageUrl: "", price: "", category: "Other" });
+        setView("list");
+      }
 
-  return (
-    <div style={s.root}>
-      <div style={s.header}>
-        <div style={s.headerTop}>
-          <div style={s.appBrand}>
-            <div style={s.iconWrap}>🛍️</div>
-            <div>
-              <div style={s.appName}>CartMate</div>
-              <div style={s.appTagline}>Smart Grocery Lists</div>
-            </div>
-          </div>
-          <button style={s.manageBtn} onClick={() => setView(view === "manageStores" ? "list" : "manageStores")}>
-            {view === "manageStores" ? "✕ Close" : "⚙️ Stores"}
-          </button>
-        </div>
-        <div style={s.tabScroll}>
-          {stores.map(st => (
-            <button key={st.id} onClick={() => { setActiveStore(st.id); setView("list"); setFilterCat("All"); }}
-              style={{ ...s.tab, ...(activeStore === st.id ? { ...s.tabActive, borderBottomColor: st.color, color: st.color } : {}) }}>
-              <span style={{ fontSize: 18 }}>{st.emoji}</span>
-              <span style={s.tabLabel}>{st.name}</span>
-              {(allItems[st.id] || []).filter(i => !i.checked).length > 0 && (
-                <span style={{ ...s.tabBadge, background: st.color }}>
-                  {(allItems[st.id] || []).filter(i => !i.checked).length}
-                </span>
-              )}
-            </button>
-          ))}
-          <button style={s.addStoreTab} onClick={() => setView("addStore")}>+ Add</button>
-        </div>
-      </div>
+      function toggleItem(id) {
+        setAllItems(prev => ({ ...prev, [activeStore]: prev[activeStore].map(i => i.id === id ? { ...i, checked: !i.checked } : i) }));
+      }
 
-      {view === "manageStores" && (
-        <div style={s.panel}>
-          <p style={s.panelTitle}>Manage Stores</p>
-          {stores.map(st => (
-            <div key={st.id} style={s.storeRow}>
-              <span style={{ fontSize: 22 }}>{st.emoji}</span>
-              <span style={{ flex: 1, fontWeight: 600, color: "#1a2e24" }}>{st.name}</span>
-              <span style={{ ...s.colorDot, background: st.color }} />
-              {stores.length > 1 && (
-                deleteStoreId === st.id ? (
-                  <div style={{ display: "flex", gap: 6 }}>
-                    <button style={{ ...s.smallBtn, background: "#e57373", color: "#fff" }} onClick={() => deleteStore(st.id)}>Delete</button>
-                    <button style={{ ...s.smallBtn, background: "#eee", color: "#555" }} onClick={() => setDeleteStoreId(null)}>Cancel</button>
-                  </div>
-                ) : (
-                  <button style={{ ...s.smallBtn, background: "#fce8e8", color: "#c0392b" }} onClick={() => setDeleteStoreId(st.id)}>🗑️ Remove</button>
-                )
-              )}
-            </div>
-          ))}
-        </div>
-      )}
+      function deleteItem(id) {
+        setAllItems(prev => ({ ...prev, [activeStore]: prev[activeStore].filter(i => i.id !== id) }));
+      }
 
-      {view === "addStore" && (
-        <div style={s.panel}>
-          <p style={s.panelTitle}>Add New Store</p>
-          <input style={s.input} placeholder="Store name (e.g. Walmart, Target...)" value={storeForm.name}
-            onChange={e => handleStoreNameChange(e.target.value)} />
-          {storeForm.autoDetected && (
-            <div style={{ ...s.brandHint, borderColor: storeForm.color, background: storeForm.color + "15" }}>
-              <span style={{ fontSize: 20 }}>{storeForm.emoji}</span>
-              <div style={{ flex: 1 }}>
-                <p style={{ margin: 0, fontSize: 13, fontWeight: 700, color: storeForm.color }}>Brand detected! 🎉</p>
-                <p style={{ margin: "2px 0 0", fontSize: 12, color: "#666" }}>Color & emoji auto-set. You can still change below.</p>
+      function addStore() {
+        if (!storeForm.name.trim()) return;
+        const colorToUse = storeForm.color || FALLBACK_COLORS[stores.length % FALLBACK_COLORS.length];
+        const newStore = { id: Date.now().toString(), name: storeForm.name.trim(), emoji: storeForm.emoji, color: colorToUse };
+        setStores(prev => [...prev, newStore]);
+        setActiveStore(newStore.id);
+        setStoreForm({ name: "", emoji: "🏪", color: "#3D8B6F", autoDetected: false });
+        setView("list");
+      }
+
+      function deleteStore(id) {
+        const updated = stores.filter(s => s.id !== id);
+        setStores(updated);
+        setAllItems(prev => { const n = { ...prev }; delete n[id]; return n; });
+        if (activeStore === id) setActiveStore(updated[0]?.id || "");
+        setDeleteStoreId(null);
+        setView("list");
+      }
+
+      const unchecked = items.filter(i => !i.checked && (filterCat === "All" || i.category === filterCat));
+      const checked = items.filter(i => i.checked && (filterCat === "All" || i.category === filterCat));
+      const groupedUnchecked = CATEGORIES.reduce((acc, cat) => {
+        const catItems = unchecked.filter(i => i.category === cat);
+        if (catItems.length) acc[cat] = catItems;
+        return acc;
+      }, {});
+      const totalUnchecked = (allItems[activeStore] || []).filter(i => !i.checked).length;
+
+      return (
+        <div style={s.root}>
+          <div style={s.header}>
+            <div style={s.headerTop}>
+              <div style={s.appBrand}>
+                <div style={s.iconWrap}>🛍️</div>
+                <div>
+                  <div style={s.appName}>CartMate</div>
+                  <div style={s.appTagline}>Smart Grocery Lists</div>
+                </div>
               </div>
-              <div style={{ ...s.colorDot, background: storeForm.color, width: 18, height: 18 }} />
+              <button style={s.manageBtn} onClick={() => setView(view === "manageStores" ? "list" : "manageStores")}>
+                {view === "manageStores" ? "✕ Close" : "⚙️ Stores"}
+              </button>
             </div>
-          )}
-          <div style={{ ...s.colorPreviewBar, background: storeForm.color }}>
-            <span style={s.colorPreviewLabel}>Store Color</span>
-            <span style={s.colorPreviewHex}>{storeForm.color}</span>
+            <div style={s.tabScroll}>
+              {stores.map(st => (
+                <button key={st.id} onClick={() => { setActiveStore(st.id); setView("list"); setFilterCat("All"); }}
+                  style={{ ...s.tab, ...(activeStore === st.id ? { ...s.tabActive, borderBottomColor: st.color, color: st.color } : {}) }}>
+                  <span style={{ fontSize: 18 }}>{st.emoji}</span>
+                  <span style={s.tabLabel}>{st.name}</span>
+                  {(allItems[st.id] || []).filter(i => !i.checked).length > 0 && (
+                    <span style={{ ...s.tabBadge, background: st.color }}>
+                      {(allItems[st.id] || []).filter(i => !i.checked).length}
+                    </span>
+                  )}
+                </button>
+              ))}
+              <button style={s.addStoreTab} onClick={() => setView("addStore")}>+ Add</button>
+            </div>
           </div>
-          <p style={s.fieldLabel}>Override Color</p>
-          <div style={s.colorGrid}>
-            {[...FALLBACK_COLORS, ...EXTRA_COLORS].map(c => (
-              <button key={c} style={{ ...s.colorBtn, background: c, ...(storeForm.color === c ? s.colorBtnActive : {}) }}
-                onClick={() => setStoreForm(f => ({ ...f, color: c, autoDetected: false }))} />
-            ))}
-          </div>
-          <p style={s.fieldLabel}>Choose Emoji</p>
-          <div style={s.emojiGroupTabs}>
-            {EMOJI_GROUPS.map(g => (
-              <button key={g.label}
-                style={{ ...s.emojiGroupTab, ...(emojiGroup === g.label ? { background: storeForm.color, color: "#fff" } : {}) }}
-                onClick={() => setEmojiGroup(g.label)}>{g.label}</button>
-            ))}
-          </div>
-          <div style={s.emojiGrid}>
-            {(EMOJI_GROUPS.find(g => g.label === emojiGroup)?.emojis || []).map(em => (
-              <button key={em}
-                style={{ ...s.emojiBtn, ...(storeForm.emoji === em ? { ...s.emojiBtnActive, borderColor: storeForm.color, background: storeForm.color + "20" } : {}) }}
-                onClick={() => setStoreForm(f => ({ ...f, emoji: em }))}>{em}</button>
-            ))}
-          </div>
-          <div style={s.formBtns}>
-            <button style={{ ...s.btn, background: storeForm.color }} onClick={addStore}>Add Store</button>
-            <button style={{ ...s.btn, background: "#e8ede9", color: "#555" }} onClick={() => setView("list")}>Cancel</button>
-          </div>
-        </div>
-      )}
 
-      {view === "addItem" && (
-        <div style={s.panel}>
-          <p style={{ ...s.panelTitle, color: store?.color }}>Add Item — {store?.name}</p>
-          <input style={s.input} placeholder="Item name *" value={form.name}
-            onChange={e => setForm(f => ({ ...f, name: e.target.value }))} />
-          <input style={s.input} placeholder="Image URL (optional)" value={form.imageUrl}
-            onChange={e => setForm(f => ({ ...f, imageUrl: e.target.value }))} />
-          <input style={s.input} placeholder="Price (optional, e.g. $12.99)" value={form.price}
-            onChange={e => setForm(f => ({ ...f, price: e.target.value }))} />
-          <p style={s.fieldLabel}>Category</p>
-          <div style={s.catGrid}>
-            {CATEGORIES.map(cat => (
-              <button key={cat}
-                style={{ ...s.catChip, ...(form.category === cat ? { background: store?.color, color: "#fff", borderColor: store?.color } : {}) }}
-                onClick={() => setForm(f => ({ ...f, category: cat }))}>{cat}</button>
-            ))}
-          </div>
-          {form.imageUrl && (
-            <img src={form.imageUrl} alt="preview" style={s.previewImg} onError={e => e.target.style.display = "none"} />
-          )}
-          <div style={s.formBtns}>
-            <button style={{ ...s.btn, background: store?.color }} onClick={addItem}>Add Item</button>
-            <button style={{ ...s.btn, background: "#e8ede9", color: "#555" }} onClick={() => setView("list")}>Cancel</button>
-          </div>
-        </div>
-      )}
-
-      {view === "list" && (
-        <div style={s.content}>
-          <div style={s.storeSummary}>
-            <div style={{ ...s.storeIconBg, background: (store?.color || "#3D8B6F") + "22" }}>
-              <span style={{ fontSize: 26 }}>{store?.emoji}</span>
-            </div>
-            <div>
-              <p style={s.storeName}>{store?.name}</p>
-              <p style={s.storeCount}>
-                {totalUnchecked === 0 && items.length === 0 ? "No items yet — tap + to add!"
-                  : totalUnchecked === 0 ? "All done! 🎉"
-                  : `${totalUnchecked} item${totalUnchecked !== 1 ? "s" : ""} to get`}
-              </p>
-            </div>
-          </div>
-          {items.length > 0 && (
-            <div style={s.filterBar}>
-              {["All", ...CATEGORIES.filter(c => items.some(i => i.category === c))].map(cat => (
-                <button key={cat}
-                  style={{ ...s.filterChip, ...(filterCat === cat ? { background: store?.color, color: "#fff", borderColor: store?.color } : {}) }}
-                  onClick={() => setFilterCat(cat)}>{cat}</button>
+          {view === "manageStores" && (
+            <div style={s.panel}>
+              <p style={s.panelTitle}>Manage Stores</p>
+              {stores.map(st => (
+                <div key={st.id} style={s.storeRow}>
+                  <span style={{ fontSize: 22 }}>{st.emoji}</span>
+                  <span style={{ flex: 1, fontWeight: 600, color: "#1a2e24" }}>{st.name}</span>
+                  <span style={{ ...s.colorDot, background: st.color }} />
+                  {stores.length > 1 && (
+                    deleteStoreId === st.id ? (
+                      <div style={{ display: "flex", gap: 6 }}>
+                        <button style={{ ...s.smallBtn, background: "#e57373", color: "#fff" }} onClick={() => deleteStore(st.id)}>Delete</button>
+                        <button style={{ ...s.smallBtn, background: "#eee", color: "#555" }} onClick={() => setDeleteStoreId(null)}>Cancel</button>
+                      </div>
+                    ) : (
+                      <button style={{ ...s.smallBtn, background: "#fce8e8", color: "#c0392b" }} onClick={() => setDeleteStoreId(st.id)}>🗑️ Remove</button>
+                    )
+                  )}
+                </div>
               ))}
             </div>
           )}
-          {items.length === 0 && (
-            <div style={s.empty}>
-              <div style={{ fontSize: 52, marginBottom: 12 }}>🛒</div>
-              <p style={s.emptyTitle}>Your list is empty</p>
-              <p style={s.emptySub}>Tap + to add your first item</p>
+
+          {view === "addStore" && (
+            <div style={s.panel}>
+              <p style={s.panelTitle}>Add New Store</p>
+              <input style={s.input} placeholder="Store name (e.g. Walmart, Target...)" value={storeForm.name}
+                onChange={e => handleStoreNameChange(e.target.value)} />
+              {storeForm.autoDetected && (
+                <div style={{ ...s.brandHint, borderColor: storeForm.color, background: storeForm.color + "15" }}>
+                  <span style={{ fontSize: 20 }}>{storeForm.emoji}</span>
+                  <div style={{ flex: 1 }}>
+                    <p style={{ margin: 0, fontSize: 13, fontWeight: 700, color: storeForm.color }}>Brand detected! 🎉</p>
+                    <p style={{ margin: "2px 0 0", fontSize: 12, color: "#666" }}>Color & emoji auto-set. You can still change below.</p>
+                  </div>
+                  <div style={{ ...s.colorDot, background: storeForm.color, width: 18, height: 18 }} />
+                </div>
+              )}
+              <div style={{ ...s.colorPreviewBar, background: storeForm.color }}>
+                <span style={s.colorPreviewLabel}>Store Color</span>
+                <span style={s.colorPreviewHex}>{storeForm.color}</span>
+              </div>
+              <p style={s.fieldLabel}>Override Color</p>
+              <div style={s.colorGrid}>
+                {[...FALLBACK_COLORS, ...EXTRA_COLORS].map(c => (
+                  <button key={c} style={{ ...s.colorBtn, background: c, ...(storeForm.color === c ? s.colorBtnActive : {}) }}
+                    onClick={() => setStoreForm(f => ({ ...f, color: c, autoDetected: false }))} />
+                ))}
+              </div>
+              <p style={s.fieldLabel}>Choose Emoji</p>
+              <div style={s.emojiGroupTabs}>
+                {EMOJI_GROUPS.map(g => (
+                  <button key={g.label}
+                    style={{ ...s.emojiGroupTab, ...(emojiGroup === g.label ? { background: storeForm.color, color: "#fff" } : {}) }}
+                    onClick={() => setEmojiGroup(g.label)}>{g.label}</button>
+                ))}
+              </div>
+              <div style={s.emojiGrid}>
+                {(EMOJI_GROUPS.find(g => g.label === emojiGroup)?.emojis || []).map(em => (
+                  <button key={em}
+                    style={{ ...s.emojiBtn, ...(storeForm.emoji === em ? { ...s.emojiBtnActive, borderColor: storeForm.color, background: storeForm.color + "20" } : {}) }}
+                    onClick={() => setStoreForm(f => ({ ...f, emoji: em }))}>{em}</button>
+                ))}
+              </div>
+              <div style={s.formBtns}>
+                <button style={{ ...s.btn, background: storeForm.color }} onClick={addStore}>Add Store</button>
+                <button style={{ ...s.btn, background: "#e8ede9", color: "#555" }} onClick={() => setView("list")}>Cancel</button>
+              </div>
             </div>
           )}
-          {Object.entries(groupedUnchecked).map(([cat, catItems]) => (
-            <div key={cat} style={s.group}>
-              <p style={{ ...s.groupLabel, color: store?.color }}>{cat}</p>
-              {catItems.map(item => (
-                <ItemCard key={item.id} item={item} storeColor={store?.color}
-                  imgErrors={imgErrors} setImgErrors={setImgErrors}
-                  onToggle={toggleItem} onDelete={deleteItem} />
-              ))}
-            </div>
-          ))}
-          {checked.length > 0 && (
-            <div style={s.group}>
-              <p style={{ ...s.groupLabel, color: "#bbb" }}>✅ Done ({checked.length})</p>
-              {checked.map(item => (
-                <ItemCard key={item.id} item={item} storeColor={store?.color}
-                  imgErrors={imgErrors} setImgErrors={setImgErrors}
-                  onToggle={toggleItem} onDelete={deleteItem} dimmed />
-              ))}
+
+          {view === "addItem" && (
+            <div style={s.panel}>
+              <p style={{ ...s.panelTitle, color: store?.color }}>Add Item — {store?.name}</p>
+              <input style={s.input} placeholder="Item name *" value={form.name}
+                onChange={e => setForm(f => ({ ...f, name: e.target.value }))} />
+              <input style={s.input} placeholder="Image URL (optional)" value={form.imageUrl}
+                onChange={e => setForm(f => ({ ...f, imageUrl: e.target.value }))} />
+              <input style={s.input} placeholder="Price (optional, e.g. $12.99)" value={form.price}
+                onChange={e => setForm(f => ({ ...f, price: e.target.value }))} />
+              <p style={s.fieldLabel}>Category</p>
+              <div style={s.catGrid}>
+                {CATEGORIES.map(cat => (
+                  <button key={cat}
+                    style={{ ...s.catChip, ...(form.category === cat ? { background: store?.color, color: "#fff", borderColor: store?.color } : {}) }}
+                    onClick={() => setForm(f => ({ ...f, category: cat }))}>{cat}</button>
+                ))}
+              </div>
+              {form.imageUrl && (
+                <img src={form.imageUrl} alt="preview" style={s.previewImg} onError={e => e.target.style.display = "none"} />
+              )}
+              <div style={s.formBtns}>
+                <button style={{ ...s.btn, background: store?.color }} onClick={addItem}>Add Item</button>
+                <button style={{ ...s.btn, background: "#e8ede9", color: "#555" }} onClick={() => setView("list")}>Cancel</button>
+              </div>
             </div>
           )}
+
+          {view === "list" && (
+            <div style={s.content}>
+              <div style={s.storeSummary}>
+                <div style={{ ...s.storeIconBg, background: (store?.color || "#3D8B6F") + "22" }}>
+                  <span style={{ fontSize: 26 }}>{store?.emoji}</span>
+                </div>
+                <div>
+                  <p style={s.storeName}>{store?.name}</p>
+                  <p style={s.storeCount}>
+                    {totalUnchecked === 0 && items.length === 0 ? "No items yet — tap + to add!"
+                      : totalUnchecked === 0 ? "All done! 🎉"
+                      : `${totalUnchecked} item${totalUnchecked !== 1 ? "s" : ""} to get`}
+                  </p>
+                </div>
+              </div>
+              {items.length > 0 && (
+                <div style={s.filterBar}>
+                  {["All", ...CATEGORIES.filter(c => items.some(i => i.category === c))].map(cat => (
+                    <button key={cat}
+                      style={{ ...s.filterChip, ...(filterCat === cat ? { background: store?.color, color: "#fff", borderColor: store?.color } : {}) }}
+                      onClick={() => setFilterCat(cat)}>{cat}</button>
+                  ))}
+                </div>
+              )}
+              {items.length === 0 && (
+                <div style={s.empty}>
+                  <div style={{ fontSize: 52, marginBottom: 12 }}>🛒</div>
+                  <p style={s.emptyTitle}>Your list is empty</p>
+                  <p style={s.emptySub}>Tap + to add your first item</p>
+                </div>
+              )}
+              {Object.entries(groupedUnchecked).map(([cat, catItems]) => (
+                <div key={cat} style={s.group}>
+                  <p style={{ ...s.groupLabel, color: store?.color }}>{cat}</p>
+                  {catItems.map(item => (
+                    <ItemCard key={item.id} item={item} storeColor={store?.color}
+                      imgErrors={imgErrors} setImgErrors={setImgErrors}
+                      onToggle={toggleItem} onDelete={deleteItem} />
+                  ))}
+                </div>
+              ))}
+              {checked.length > 0 && (
+                <div style={s.group}>
+                  <p style={{ ...s.groupLabel, color: "#bbb" }}>✅ Done ({checked.length})</p>
+                  {checked.map(item => (
+                    <ItemCard key={item.id} item={item} storeColor={store?.color}
+                      imgErrors={imgErrors} setImgErrors={setImgErrors}
+                      onToggle={toggleItem} onDelete={deleteItem} dimmed />
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
+          {view === "list" && (
+            <button style={{ ...s.fab, background: store?.color }} onClick={() => setView("addItem")}>+</button>
+          )}
         </div>
-      )}
+      );
+    }
 
-      {view === "list" && (
-        <button style={{ ...s.fab, background: store?.color }} onClick={() => setView("addItem")}>+</button>
-      )}
-    </div>
-  );
-}
-
-function ItemCard({ item, storeColor, imgErrors, setImgErrors, onToggle, onDelete, dimmed }) {
-  return (
-    <div style={{ ...s.card, opacity: dimmed ? 0.4 : 1 }}>
-      {item.imageUrl && !imgErrors[item.id] ? (
-        <img src={item.imageUrl} alt={item.name} style={s.cardImg}
-          onError={() => setImgErrors(e => ({ ...e, [item.id]: true }))} />
-      ) : (
-        <div style={s.cardImgPlaceholder}>🛒</div>
-      )}
-      <div style={s.cardInfo}>
-        <p style={{ ...s.cardName, textDecoration: dimmed ? "line-through" : "none" }}>{item.name}</p>
-        <div style={{ display: "flex", gap: 6, alignItems: "center", flexWrap: "wrap", marginTop: 4 }}>
-          <span style={s.cardCat}>{item.category}</span>
-          {item.price && <span style={s.cardPrice}>{item.price}</span>}
+    function ItemCard({ item, storeColor, imgErrors, setImgErrors, onToggle, onDelete, dimmed }) {
+      return (
+        <div style={{ ...s.card, opacity: dimmed ? 0.4 : 1 }}>
+          {item.imageUrl && !imgErrors[item.id] ? (
+            <img src={item.imageUrl} alt={item.name} style={s.cardImg}
+              onError={() => setImgErrors(e => ({ ...e, [item.id]: true }))} />
+          ) : (
+            <div style={s.cardImgPlaceholder}>🛒</div>
+          )}
+          <div style={s.cardInfo}>
+            <p style={{ ...s.cardName, textDecoration: dimmed ? "line-through" : "none" }}>{item.name}</p>
+            <div style={{ display: "flex", gap: 6, alignItems: "center", flexWrap: "wrap", marginTop: 4 }}>
+              <span style={s.cardCat}>{item.category}</span>
+              {item.price && <span style={s.cardPrice}>{item.price}</span>}
+            </div>
+          </div>
+          <div style={s.cardActions}>
+            <button style={{ ...s.checkBtn, borderColor: storeColor, color: dimmed ? storeColor : "#ccc" }}
+              onClick={() => onToggle(item.id)}>{dimmed ? "✓" : "○"}</button>
+            <button style={s.delBtn} onClick={() => onDelete(item.id)}>🗑️</button>
+          </div>
         </div>
-      </div>
-      <div style={s.cardActions}>
-        <button style={{ ...s.checkBtn, borderColor: storeColor, color: dimmed ? storeColor : "#ccc" }}
-          onClick={() => onToggle(item.id)}>{dimmed ? "✓" : "○"}</button>
-        <button style={s.delBtn} onClick={() => onDelete(item.id)}>🗑️</button>
-      </div>
-    </div>
-  );
-}
+      );
+    }
 
-const s = {
-  root: { fontFamily: "'DM Sans','Segoe UI',sans-serif", maxWidth: 480, margin: "0 auto", minHeight: "100vh", background: "#f0f5f2", display: "flex", flexDirection: "column", position: "relative", paddingBottom: 90 },
-  header: { background: "#fff", borderBottom: "1px solid #deeee7", padding: "20px 16px 0", boxShadow: "0 2px 12px rgba(61,139,111,0.07)" },
-  headerTop: { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 },
-  appBrand: { display: "flex", alignItems: "center", gap: 10 },
-  iconWrap: { fontSize: 26, background: "#e8f5ee", borderRadius: 12, width: 44, height: 44, display: "flex", alignItems: "center", justifyContent: "center" },
-  appName: { fontSize: 20, fontWeight: 800, color: "#1a2e24", letterSpacing: -0.5 },
-  appTagline: { fontSize: 11, color: "#7aab8e", marginTop: 1, fontWeight: 500 },
-  manageBtn: { background: "#e8f5ee", border: "none", color: "#3D8B6F", borderRadius: 20, padding: "7px 14px", fontSize: 12, fontWeight: 700, cursor: "pointer" },
-  tabScroll: { display: "flex", gap: 2, overflowX: "auto" },
-  tab: { display: "flex", flexDirection: "column", alignItems: "center", gap: 2, padding: "8px 14px 10px", background: "transparent", border: "none", borderBottom: "3px solid transparent", color: "#aac4b0", cursor: "pointer", fontSize: 11, fontWeight: 600, whiteSpace: "nowrap", position: "relative", minWidth: 64 },
-  tabActive: { color: "#1a2e24" },
-  tabLabel: { fontSize: 10 },
-  tabBadge: { position: "absolute", top: 4, right: 6, color: "#fff", borderRadius: 10, fontSize: 9, fontWeight: 800, padding: "1px 5px" },
-  addStoreTab: { display: "flex", alignItems: "center", padding: "8px 16px 10px", background: "transparent", border: "none", color: "#7aab8e", cursor: "pointer", fontSize: 12, fontWeight: 700, whiteSpace: "nowrap" },
-  panel: { background: "#fff", margin: 16, borderRadius: 18, padding: 20, boxShadow: "0 2px 16px rgba(61,139,111,0.08)" },
-  panelTitle: { margin: "0 0 16px", fontSize: 16, fontWeight: 800, color: "#1a2e24" },
-  brandHint: { display: "flex", alignItems: "center", gap: 10, border: "1.5px solid", borderRadius: 12, padding: "10px 14px", marginBottom: 12 },
-  colorPreviewBar: { borderRadius: 10, padding: "10px 14px", marginBottom: 12, display: "flex", justifyContent: "space-between", alignItems: "center" },
-  colorPreviewLabel: { fontSize: 12, fontWeight: 700, color: "rgba(255,255,255,0.85)" },
-  colorPreviewHex: { fontSize: 12, color: "rgba(255,255,255,0.7)", fontFamily: "monospace" },
-  storeRow: { display: "flex", alignItems: "center", gap: 12, padding: "10px 0", borderBottom: "1px solid #f0f5f2" },
-  colorDot: { width: 14, height: 14, borderRadius: "50%", flexShrink: 0 },
-  smallBtn: { border: "none", borderRadius: 8, padding: "5px 10px", fontSize: 12, fontWeight: 600, cursor: "pointer" },
-  input: { width: "100%", padding: "11px 14px", borderRadius: 12, border: "1.5px solid #deeee7", fontSize: 14, marginBottom: 10, outline: "none", fontFamily: "inherit", background: "#f7fbf9", color: "#1a2e24" },
-  fieldLabel: { margin: "4px 0 8px", fontSize: 11, fontWeight: 700, color: "#7aab8e", textTransform: "uppercase", letterSpacing: 0.8 },
-  colorGrid: { display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 16 },
-  colorBtn: { width: 26, height: 26, borderRadius: "50%", border: "3px solid transparent", cursor: "pointer" },
-  colorBtnActive: { border: "3px solid #1a2e24", transform: "scale(1.2)" },
-  emojiGroupTabs: { display: "flex", gap: 4, flexWrap: "wrap", marginBottom: 10 },
-  emojiGroupTab: { padding: "4px 10px", borderRadius: 14, border: "1.5px solid #deeee7", background: "#f7fbf9", fontSize: 11, fontWeight: 700, cursor: "pointer", color: "#5a8a6f" },
-  emojiGrid: { display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 16 },
-  emojiBtn: { fontSize: 20, background: "#f7fbf9", border: "2px solid transparent", borderRadius: 8, padding: "5px 7px", cursor: "pointer" },
-  emojiBtnActive: { border: "2px solid" },
-  catGrid: { display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 12 },
-  catChip: { padding: "5px 12px", borderRadius: 20, border: "1.5px solid #deeee7", background: "#f7fbf9", fontSize: 12, fontWeight: 600, cursor: "pointer", color: "#5a8a6f" },
-  previewImg: { width: "100%", maxHeight: 120, objectFit: "contain", borderRadius: 10, marginBottom: 10, background: "#f7fbf9" },
-  formBtns: { display: "flex", gap: 10 },
-  btn: { flex: 1, padding: 12, borderRadius: 12, border: "none", color: "#fff", fontWeight: 700, fontSize: 14, cursor: "pointer", fontFamily: "inherit" },
-  content: { flex: 1, padding: 16 },
-  storeSummary: { display: "flex", alignItems: "center", gap: 14, background: "#fff", borderRadius: 16, padding: "14px 16px", marginBottom: 14, boxShadow: "0 2px 10px rgba(61,139,111,0.07)" },
-  storeIconBg: { width: 50, height: 50, borderRadius: 14, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 },
-  storeName: { margin: 0, fontWeight: 800, fontSize: 17, color: "#1a2e24" },
-  storeCount: { margin: "3px 0 0", fontSize: 13, color: "#7aab8e", fontWeight: 500 },
-  filterBar: { display: "flex", gap: 6, overflowX: "auto", marginBottom: 16, paddingBottom: 2 },
-  filterChip: { padding: "5px 14px", borderRadius: 20, border: "1.5px solid #deeee7", background: "#fff", fontSize: 12, fontWeight: 600, cursor: "pointer", color: "#5a8a6f", whiteSpace: "nowrap", flexShrink: 0 },
-  empty: { textAlign: "center", padding: "60px 20px" },
-  emptyTitle: { margin: "0 0 6px", fontWeight: 800, fontSize: 18, color: "#1a2e24" },
-  emptySub: { margin: 0, color: "#7aab8e", fontSize: 14 },
-  group: { marginBottom: 20 },
-  groupLabel: { margin: "0 0 8px", fontSize: 11, fontWeight: 800, textTransform: "uppercase", letterSpacing: 1 },
-  card: { background: "#fff", borderRadius: 14, display: "flex", alignItems: "center", gap: 12, padding: 12, marginBottom: 8, boxShadow: "0 2px 8px rgba(61,139,111,0.06)" },
-  cardImg: { width: 54, height: 54, borderRadius: 10, objectFit: "cover", flexShrink: 0, background: "#f0f5f2" },
-  cardImgPlaceholder: { width: 54, height: 54, borderRadius: 10, background: "#f0f5f2", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 22, flexShrink: 0 },
-  cardInfo: { flex: 1, minWidth: 0 },
-  cardName: { margin: 0, fontSize: 15, fontWeight: 700, color: "#1a2e24", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" },
-  cardCat: { fontSize: 11, color: "#7aab8e", fontWeight: 600, background: "#e8f5ee", borderRadius: 6, padding: "2px 7px" },
-  cardPrice: { fontSize: 13, fontWeight: 700, color: "#3D8B6F" },
-  cardActions: { display: "flex", flexDirection: "column", gap: 6, alignItems: "center" },
-  checkBtn: { width: 30, height: 30, borderRadius: "50%", border: "2px solid", background: "transparent", cursor: "pointer", fontSize: 13, fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center", padding: 0 },
-  delBtn: { background: "none", border: "none", cursor: "pointer", fontSize: 14, opacity: 0.35, padding: 0 },
-  fab: { position: "fixed", bottom: 28, right: 16, width: 56, height: 56, borderRadius: "50%", border: "none", color: "#fff", fontSize: 28, cursor: "pointer", boxShadow: "0 4px 20px rgba(61,139,111,0.3)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 100 },
-};
+    const s = {
+      root: { fontFamily: "'DM Sans','Segoe UI',sans-serif", maxWidth: 480, margin: "0 auto", minHeight: "100vh", background: "#f0f5f2", display: "flex", flexDirection: "column", position: "relative", paddingBottom: 90 },
+      header: { background: "#fff", borderBottom: "1px solid #deeee7", padding: "20px 16px 0", boxShadow: "0 2px 12px rgba(61,139,111,0.07)" },
+      headerTop: { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 },
+      appBrand: { display: "flex", alignItems: "center", gap: 10 },
+      iconWrap: { fontSize: 26, background: "#e8f5ee", borderRadius: 12, width: 44, height: 44, display: "flex", alignItems: "center", justifyContent: "center" },
+      appName: { fontSize: 20, fontWeight: 800, color: "#1a2e24", letterSpacing: -0.5 },
+      appTagline: { fontSize: 11, color: "#7aab8e", marginTop: 1, fontWeight: 500 },
+      manageBtn: { background: "#e8f5ee", border: "none", color: "#3D8B6F", borderRadius: 20, padding: "7px 14px", fontSize: 12, fontWeight: 700, cursor: "pointer" },
+      tabScroll: { display: "flex", gap: 2, overflowX: "auto" },
+      tab: { display: "flex", flexDirection: "column", alignItems: "center", gap: 2, padding: "8px 14px 10px", background: "transparent", border: "none", borderBottom: "3px solid transparent", color: "#aac4b0", cursor: "pointer", fontSize: 11, fontWeight: 600, whiteSpace: "nowrap", position: "relative", minWidth: 64 },
+      tabActive: { color: "#1a2e24" },
+      tabLabel: { fontSize: 10 },
+      tabBadge: { position: "absolute", top: 4, right: 6, color: "#fff", borderRadius: 10, fontSize: 9, fontWeight: 800, padding: "1px 5px" },
+      addStoreTab: { display: "flex", alignItems: "center", padding: "8px 16px 10px", background: "transparent", border: "none", color: "#7aab8e", cursor: "pointer", fontSize: 12, fontWeight: 700, whiteSpace: "nowrap" },
+      panel: { background: "#fff", margin: 16, borderRadius: 18, padding: 20, boxShadow: "0 2px 16px rgba(61,139,111,0.08)" },
+      panelTitle: { margin: "0 0 16px", fontSize: 16, fontWeight: 800, color: "#1a2e24" },
+      brandHint: { display: "flex", alignItems: "center", gap: 10, border: "1.5px solid", borderRadius: 12, padding: "10px 14px", marginBottom: 12 },
+      colorPreviewBar: { borderRadius: 10, padding: "10px 14px", marginBottom: 12, display: "flex", justifyContent: "space-between", alignItems: "center" },
+      colorPreviewLabel: { fontSize: 12, fontWeight: 700, color: "rgba(255,255,255,0.85)" },
+      colorPreviewHex: { fontSize: 12, color: "rgba(255,255,255,0.7)", fontFamily: "monospace" },
+      storeRow: { display: "flex", alignItems: "center", gap: 12, padding: "10px 0", borderBottom: "1px solid #f0f5f2" },
+      colorDot: { width: 14, height: 14, borderRadius: "50%", flexShrink: 0 },
+      smallBtn: { border: "none", borderRadius: 8, padding: "5px 10px", fontSize: 12, fontWeight: 600, cursor: "pointer" },
+      input: { width: "100%", padding: "11px 14px", borderRadius: 12, border: "1.5px solid #deeee7", fontSize: 14, marginBottom: 10, outline: "none", fontFamily: "inherit", background: "#f7fbf9", color: "#1a2e24" },
+      fieldLabel: { margin: "4px 0 8px", fontSize: 11, fontWeight: 700, color: "#7aab8e", textTransform: "uppercase", letterSpacing: 0.8 },
+      colorGrid: { display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 16 },
+      colorBtn: { width: 26, height: 26, borderRadius: "50%", border: "3px solid transparent", cursor: "pointer" },
+      colorBtnActive: { border: "3px solid #1a2e24", transform: "scale(1.2)" },
+      emojiGroupTabs: { display: "flex", gap: 4, flexWrap: "wrap", marginBottom: 10 },
+      emojiGroupTab: { padding: "4px 10px", borderRadius: 14, border: "1.5px solid #deeee7", background: "#f7fbf9", fontSize: 11, fontWeight: 700, cursor: "pointer", color: "#5a8a6f" },
+      emojiGrid: { display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 16 },
+      emojiBtn: { fontSize: 20, background: "#f7fbf9", border: "2px solid transparent", borderRadius: 8, padding: "5px 7px", cursor: "pointer" },
+      emojiBtnActive: { border: "2px solid" },
+      catGrid: { display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 12 },
+      catChip: { padding: "5px 12px", borderRadius: 20, border: "1.5px solid #deeee7", background: "#f7fbf9", fontSize: 12, fontWeight: 600, cursor: "pointer", color: "#5a8a6f" },
+      previewImg: { width: "100%", maxHeight: 120, objectFit: "contain", borderRadius: 10, marginBottom: 10, background: "#f7fbf9" },
+      formBtns: { display: "flex", gap: 10 },
+      btn: { flex: 1, padding: 12, borderRadius: 12, border: "none", color: "#fff", fontWeight: 700, fontSize: 14, cursor: "pointer", fontFamily: "inherit" },
+      content: { flex: 1, padding: 16 },
+      storeSummary: { display: "flex", alignItems: "center", gap: 14, background: "#fff", borderRadius: 16, padding: "14px 16px", marginBottom: 14, boxShadow: "0 2px 10px rgba(61,139,111,0.07)" },
+      storeIconBg: { width: 50, height: 50, borderRadius: 14, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 },
+      storeName: { margin: 0, fontWeight: 800, fontSize: 17, color: "#1a2e24" },
+      storeCount: { margin: "3px 0 0", fontSize: 13, color: "#7aab8e", fontWeight: 500 },
+      filterBar: { display: "flex", gap: 6, overflowX: "auto", marginBottom: 16, paddingBottom: 2 },
+      filterChip: { padding: "5px 14px", borderRadius: 20, border: "1.5px solid #deeee7", background: "#fff", fontSize: 12, fontWeight: 600, cursor: "pointer", color: "#5a8a6f", whiteSpace: "nowrap", flexShrink: 0 },
+      empty: { textAlign: "center", padding: "60px 20px" },
+      emptyTitle: { margin: "0 0 6px", fontWeight: 800, fontSize: 18, color: "#1a2e24" },
+      emptySub: { margin: 0, color: "#7aab8e", fontSize: 14 },
+      group: { marginBottom: 20 },
+      groupLabel: { margin: "0 0 8px", fontSize: 11, fontWeight: 800, textTransform: "uppercase", letterSpacing: 1 },
+      card: { background: "#fff", borderRadius: 14, display: "flex", alignItems: "center", gap: 12, padding: 12, marginBottom: 8, boxShadow: "0 2px 8px rgba(61,139,111,0.06)" },
+      cardImg: { width: 54, height: 54, borderRadius: 10, objectFit: "cover", flexShrink: 0, background: "#f0f5f2" },
+      cardImgPlaceholder: { width: 54, height: 54, borderRadius: 10, background: "#f0f5f2", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 22, flexShrink: 0 },
+      cardInfo: { flex: 1, minWidth: 0 },
+      cardName: { margin: 0, fontSize: 15, fontWeight: 700, color: "#1a2e24", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" },
+      cardCat: { fontSize: 11, color: "#7aab8e", fontWeight: 600, background: "#e8f5ee", borderRadius: 6, padding: "2px 7px" },
+      cardPrice: { fontSize: 13, fontWeight: 700, color: "#3D8B6F" },
+      cardActions: { display: "flex", flexDirection: "column", gap: 6, alignItems: "center" },
+      checkBtn: { width: 30, height: 30, borderRadius: "50%", border: "2px solid", background: "transparent", cursor: "pointer", fontSize: 13, fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center", padding: 0 },
+      delBtn: { background: "none", border: "none", cursor: "pointer", fontSize: 14, opacity: 0.35, padding: 0 },
+      fab: { position: "fixed", bottom: 28, right: 16, width: 56, height: 56, borderRadius: "50%", border: "none", color: "#fff", fontSize: 28, cursor: "pointer", boxShadow: "0 4px 20px rgba(61,139,111,0.3)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 100 },
+    };
 
-ReactDOM.render(<CartMate />, document.getElementById("root"));
-```
-
+    ReactDOM.render(<CartMate />, document.getElementById("root"));
   </script>
 </body>
 </html>
