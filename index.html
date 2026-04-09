@@ -540,6 +540,8 @@
     function ItemCard({ item, storeColor, imgErrors, setImgErrors, onToggle, onDelete, onEdit, dimmed }) {
       return (
         <div style={{...s.card, opacity: dimmed ? 0.4 : 1}}>
+          <button style={{...s.checkBtn, borderColor: storeColor, color: dimmed ? storeColor : "#ccc", flexShrink: 0}}
+            onClick={() => onToggle(item.id)}>{dimmed ? "✓" : "○"}</button>
           {item.imageUrl && !imgErrors[item.id] ? (
             <img src={item.imageUrl} alt={item.name} style={s.cardImg}
               onError={() => setImgErrors(e => ({ ...e, [item.id]: true }))} />
@@ -550,11 +552,13 @@
             <p style={{...s.cardName, textDecoration: dimmed ? "line-through" : "none"}}>{item.name}</p>
             {item.price && <p style={s.cardPrice}>{item.price}</p>}
           </div>
-          <div style={s.cardActions}>
-            <button style={{...s.checkBtn, borderColor: storeColor, color: dimmed ? storeColor : "#ccc"}}
-              onClick={() => onToggle(item.id)}>{dimmed ? "✓" : "○"}</button>
-            {!dimmed && <button style={{...s.delBtn, opacity:0.5, fontSize:13}} onClick={() => onEdit(item)}>✏️</button>}
-            <button style={s.delBtn} onClick={() => onDelete(item.id)}>🗑️</button>
+          <div style={{display:"flex", flexDirection:"row", gap:6, alignItems:"center", flexShrink:0}}>
+            {!dimmed && (
+              <button style={{background:"#e8f5ee", border:"none", borderRadius:8, width:30, height:30, fontSize:13, cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center"}}
+                onClick={() => onEdit(item)}>✏️</button>
+            )}
+            <button style={{background:"#fee", border:"none", borderRadius:8, width:30, height:30, fontSize:13, cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center"}}
+              onClick={() => onDelete(item.id)}>🗑️</button>
           </div>
         </div>
       );
