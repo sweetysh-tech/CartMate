@@ -27,73 +27,42 @@
     const { useState, useEffect } = React;
 
     const LANG_KEY = "cartmate_lang";
-    const TRANSLATIONS = {
-      en: {
-        categories: ["Produce","Meat & Seafood","Dairy","Frozen","Bakery","Snacks","Beverages","Household","Other"],
-        all: "All",
-        addItem: "Add Item",
-        addStore: "Add Store",
-        manageStores: "Manage Stores",
-        smartGrocery: "Smart Grocery Lists",
-        stores: "Stores",
-        close: "Close",
-        noItems: "No items yet — tap + to add!",
-        allDone: "All done!",
-        itemsToGet: (n) => `${n} item${n !== 1 ? "s" : ""} to get`,
-        emptyTitle: "Your list is empty",
-        emptySub: "Tap + to add your first item",
-        done: "Done",
-        brandDetected: "Brand detected!",
-        brandSub: "Color & emoji auto-set. You can still change below.",
-        storeColor: "Store Color",
-        overrideColor: "Override Color",
-        chooseEmoji: "Choose Emoji",
-        category: "Category",
-        storeName: "Store name (e.g. Walmart, Target...)",
-        itemName: "Item name *",
-        imageUrl: "Image URL (optional)",
-        price: "Price (optional, e.g. $12.99)",
-        cancel: "Cancel",
-        delete: "Delete",
-        remove: "Remove",
-        addItemTo: (name) => `Add Item — ${name}`,
-        addNewStore: "Add New Store",
-        language: "Language",
-      },
-      ko: {
-        categories: ["신선식품","육류/해산물","유제품","냉동식품","베이커리","과자/간식","음료","생활용품","기타"],
-        all: "전체",
-        addItem: "상품 추가",
-        addStore: "마트 추가",
-        manageStores: "마트 관리",
-        smartGrocery: "스마트 장보기 리스트",
-        stores: "마트",
-        close: "닫기",
-        noItems: "아직 비어있어요 — + 버튼으로 추가하세요!",
-        allDone: "완료!",
-        itemsToGet: (n) => `${n}개 남음`,
-        emptyTitle: "리스트가 비어있어요",
-        emptySub: "+ 버튼으로 첫 상품을 추가해보세요",
-        done: "완료",
-        brandDetected: "브랜드 감지됨!",
-        brandSub: "색상과 이모지가 자동으로 설정됐어요. 아래에서 변경 가능해요.",
-        storeColor: "마트 색상",
-        overrideColor: "색상 변경",
-        chooseEmoji: "이모지 선택",
-        category: "카테고리",
-        storeName: "마트 이름 (예: 코스트코, 이마트...)",
-        itemName: "상품명 *",
-        imageUrl: "사진 URL (선택사항)",
-        price: "가격 (선택사항, 예: $12.99)",
-        cancel: "취소",
-        delete: "삭제",
-        remove: "제거",
-        addItemTo: (name) => `상품 추가 — ${name}`,
-        addNewStore: "새 마트 추가",
-        language: "언어",
-      }
+    const STORAGE_KEY = "cartmate_v4";
+    const STORES_KEY = "cartmate_stores_v4";
+
+    const EN = {
+      cats: ["Produce","Meat & Seafood","Dairy","Frozen","Bakery","Snacks","Beverages","Household","Other"],
+      all: "All", addItem: "Add Item", addStore: "Add Store", manageStores: "Manage Stores",
+      tagline: "Smart Grocery Lists", stores: "Stores", close: "Close",
+      noItems: "No items yet - tap + to add!", allDone: "All done!",
+      itemsToGet: function(n) { return n + " item" + (n !== 1 ? "s" : "") + " to get"; },
+      emptyTitle: "Your list is empty", emptySub: "Tap + to add your first item",
+      done: "Done", brandDetected: "Brand detected!",
+      brandSub: "Color & emoji auto-set. You can still change below.",
+      storeColor: "Store Color", overrideColor: "Override Color", chooseEmoji: "Choose Emoji",
+      category: "Category", storePlaceholder: "Store name (e.g. Walmart, Target...)",
+      itemPlaceholder: "Item name *", imgPlaceholder: "Image URL (optional)",
+      pricePlaceholder: "Price (optional, e.g. $12.99)", cancel: "Cancel",
+      del: "Delete", remove: "Remove", addNewStore: "Add New Store",
+      addItemTo: function(name) { return "Add Item - " + name; },
     };
-    const CATEGORIES = TRANSLATIONS.en.categories;
+
+    const KO = {
+      cats: ["신선식품","육류/해산물","유제품","냉동식품","베이커리","과자/간식","음료","생활용품","기타"],
+      all: "전체", addItem: "상품 추가", addStore: "마트 추가", manageStores: "마트 관리",
+      tagline: "스마트 장보기 리스트", stores: "마트", close: "닫기",
+      noItems: "아직 비어있어요 - + 버튼으로 추가하세요!", allDone: "완료!",
+      itemsToGet: function(n) { return n + "개 남음"; },
+      emptyTitle: "리스트가 비어있어요", emptySub: "+ 버튼으로 첫 상품을 추가해보세요",
+      done: "완료", brandDetected: "브랜드 감지됨!",
+      brandSub: "색상과 이모지가 자동으로 설정됐어요. 아래에서 변경 가능해요.",
+      storeColor: "마트 색상", overrideColor: "색상 변경", chooseEmoji: "이모지 선택",
+      category: "카테고리", storePlaceholder: "마트 이름 (예: 코스트코, 이마트...)",
+      itemPlaceholder: "상품명 *", imgPlaceholder: "사진 URL (선택사항)",
+      pricePlaceholder: "가격 (선택사항, 예: $12.99)", cancel: "취소",
+      del: "삭제", remove: "제거", addNewStore: "새 마트 추가",
+      addItemTo: function(name) { return "상품 추가 - " + name; },
+    };
 
     const BRAND_PRESETS = [
       { keywords: ["costco"], color: "#E31837", emoji: "🏪" },
@@ -133,9 +102,6 @@
       { id: "aldi", name: "Aldi", emoji: "🛒", color: "#00539B" },
     ];
 
-    const STORAGE_KEY = "cartmate_v4";
-    const STORES_KEY = "cartmate_stores_v4";
-
     const EMOJI_GROUPS = [
       { label: "Stores", emojis: ["🏪","🏬","🛒","🛍️","🏦","🏢","🏭","🏨"] },
       { label: "Food", emojis: ["🍎","🥦","🥩","🐟","🥛","🧀","🥚","🥐","🍞","🍜","🍣","🥗","🌽","🥕","🍇","🍓","🫐","🥑","🧅","🧄"] },
@@ -169,20 +135,18 @@
       const [form, setForm] = useState({ name: "", imageUrl: "", price: "", category: "Other" });
       const [storeForm, setStoreForm] = useState({ name: "", emoji: "🏪", color: "#3D8B6F", autoDetected: false });
       const [emojiGroup, setEmojiGroup] = useState("Stores");
-      const [filterCat, setFilterCat] = useState("All");
+      const [filterCat, setFilterCat] = useState("all");
       const [imgErrors, setImgErrors] = useState({});
       const [deleteStoreId, setDeleteStoreId] = useState(null);
       const [lang, setLang] = useState(() => load(LANG_KEY, "en"));
-      const t = TRANSLATIONS[lang];
-      const CATS = t.categories;
 
-      useEffect(() => { save(LANG_KEY, lang); }, [lang]);
-
+      const t = lang === "en" ? EN : KO;
       const store = stores.find(s => s.id === activeStore) || stores[0];
       const items = allItems[activeStore] || [];
 
       useEffect(() => { save(STORAGE_KEY, allItems); }, [allItems]);
       useEffect(() => { save(STORES_KEY, stores); }, [stores]);
+      useEffect(() => { save(LANG_KEY, lang); }, [lang]);
 
       function handleStoreNameChange(name) {
         const detected = detectBrand(name);
@@ -197,7 +161,7 @@
         if (!form.name.trim()) return;
         const newItem = { id: Date.now(), name: form.name.trim(), imageUrl: form.imageUrl.trim(), price: form.price.trim(), category: form.category, checked: false };
         setAllItems(prev => ({ ...prev, [activeStore]: [...(prev[activeStore] || []), newItem] }));
-        setForm({ name: "", imageUrl: "", price: "", category: "Other" });
+        setForm({ name: "", imageUrl: "", price: "", category: t.cats[8] });
         setView("list");
       }
 
@@ -228,9 +192,9 @@
         setView("list");
       }
 
-      const unchecked = items.filter(i => !i.checked && (filterCat === "All" || i.category === filterCat));
-      const checked = items.filter(i => i.checked && (filterCat === "All" || i.category === filterCat));
-      const groupedUnchecked = CATS.reduce((acc, cat) => {
+      const unchecked = items.filter(i => !i.checked && (filterCat === "all" || i.category === filterCat));
+      const checked = items.filter(i => i.checked && (filterCat === "all" || i.category === filterCat));
+      const groupedUnchecked = t.cats.reduce((acc, cat) => {
         const catItems = unchecked.filter(i => i.category === cat);
         if (catItems.length) acc[cat] = catItems;
         return acc;
@@ -245,26 +209,26 @@
                 <div style={s.iconWrap}>🛍️</div>
                 <div>
                   <div style={s.appName}>CartMate</div>
-                  <div style={s.appTagline}>Smart Grocery Lists</div>
+                  <div style={s.appTagline}>{t.tagline}</div>
                 </div>
               </div>
-              <button
-              style={{ ...s.manageBtn, marginRight: 6 }}
-              onClick={() => setLang(lang === "en" ? "ko" : "en")}>
-              {lang === "en" ? "🇰🇷 한국어" : "🇺🇸 ENG"}
-            </button>
-            <button style={s.manageBtn} onClick={() => setView(view === "manageStores" ? "list" : "manageStores")}>
-                {view === "manageStores" ? `✕ ${t.close}` : `⚙️ ${t.stores}`}
-              </button>
+              <div style={{display:"flex",gap:6}}>
+                <button style={{...s.manageBtn, background:"#d4edda", color:"#2d6a4f"}} onClick={() => setLang(lang === "en" ? "ko" : "en")}>
+                  {lang === "en" ? "🇰🇷 한국어" : "🇺🇸 ENG"}
+                </button>
+                <button style={s.manageBtn} onClick={() => setView(view === "manageStores" ? "list" : "manageStores")}>
+                  {view === "manageStores" ? "✕ " + t.close : "⚙️ " + t.stores}
+                </button>
+              </div>
             </div>
             <div style={s.tabScroll}>
               {stores.map(st => (
-                <button key={st.id} onClick={() => { setActiveStore(st.id); setView("list"); setFilterCat("All"); }}
-                  style={{ ...s.tab, ...(activeStore === st.id ? { ...s.tabActive, borderBottomColor: st.color, color: st.color } : {}) }}>
-                  <span style={{ fontSize: 18 }}>{st.emoji}</span>
+                <button key={st.id} onClick={() => { setActiveStore(st.id); setView("list"); setFilterCat("all"); }}
+                  style={{...s.tab, ...(activeStore === st.id ? {...s.tabActive, borderBottomColor: st.color, color: st.color} : {})}}>
+                  <span style={{fontSize: 18}}>{st.emoji}</span>
                   <span style={s.tabLabel}>{st.name}</span>
                   {(allItems[st.id] || []).filter(i => !i.checked).length > 0 && (
-                    <span style={{ ...s.tabBadge, background: st.color }}>
+                    <span style={{...s.tabBadge, background: st.color}}>
                       {(allItems[st.id] || []).filter(i => !i.checked).length}
                     </span>
                   )}
@@ -279,17 +243,17 @@
               <p style={s.panelTitle}>{t.manageStores}</p>
               {stores.map(st => (
                 <div key={st.id} style={s.storeRow}>
-                  <span style={{ fontSize: 22 }}>{st.emoji}</span>
-                  <span style={{ flex: 1, fontWeight: 600, color: "#1a2e24" }}>{st.name}</span>
-                  <span style={{ ...s.colorDot, background: st.color }} />
+                  <span style={{fontSize: 22}}>{st.emoji}</span>
+                  <span style={{flex: 1, fontWeight: 600, color: "#1a2e24"}}>{st.name}</span>
+                  <span style={{...s.colorDot, background: st.color}} />
                   {stores.length > 1 && (
                     deleteStoreId === st.id ? (
-                      <div style={{ display: "flex", gap: 6 }}>
-                        <button style={{ ...s.smallBtn, background: "#e57373", color: "#fff" }} onClick={() => deleteStore(st.id)}>{t.delete}</button>
-                        <button style={{ ...s.smallBtn, background: "#eee", color: "#555" }} onClick={() => setDeleteStoreId(null)}>{t.cancel}</button>
+                      <div style={{display: "flex", gap: 6}}>
+                        <button style={{...s.smallBtn, background: "#e57373", color: "#fff"}} onClick={() => deleteStore(st.id)}>{t.del}</button>
+                        <button style={{...s.smallBtn, background: "#eee", color: "#555"}} onClick={() => setDeleteStoreId(null)}>{t.cancel}</button>
                       </div>
                     ) : (
-                      <button style={{ ...s.smallBtn, background: "#fce8e8", color: "#c0392b" }} onClick={() => setDeleteStoreId(st.id)}>🗑️ Remove</button>
+                      <button style={{...s.smallBtn, background: "#fce8e8", color: "#c0392b"}} onClick={() => setDeleteStoreId(st.id)}>🗑️ {t.remove}</button>
                     )
                   )}
                 </div>
@@ -300,65 +264,65 @@
           {view === "addStore" && (
             <div style={s.panel}>
               <p style={s.panelTitle}>{t.addNewStore}</p>
-              <input style={s.input} {...{placeholder: t.storeName}} value={storeForm.name}
+              <input style={s.input} placeholder={t.storePlaceholder} value={storeForm.name}
                 onChange={e => handleStoreNameChange(e.target.value)} />
               {storeForm.autoDetected && (
-                <div style={{ ...s.brandHint, borderColor: storeForm.color, background: storeForm.color + "15" }}>
-                  <span style={{ fontSize: 20 }}>{storeForm.emoji}</span>
-                  <div style={{ flex: 1 }}>
-                    <p style={{ margin: 0, fontSize: 13, fontWeight: 700, color: storeForm.color }}>Brand detected! 🎉</p>
-                    <p style={{ margin: "2px 0 0", fontSize: 12, color: "#666" }}>Color & emoji auto-set. You can still change below.</p>
+                <div style={{...s.brandHint, borderColor: storeForm.color, background: storeForm.color + "15"}}>
+                  <span style={{fontSize: 20}}>{storeForm.emoji}</span>
+                  <div style={{flex: 1}}>
+                    <p style={{margin: 0, fontSize: 13, fontWeight: 700, color: storeForm.color}}>{t.brandDetected}</p>
+                    <p style={{margin: "2px 0 0", fontSize: 12, color: "#666"}}>{t.brandSub}</p>
                   </div>
-                  <div style={{ ...s.colorDot, background: storeForm.color, width: 18, height: 18 }} />
+                  <div style={{...s.colorDot, background: storeForm.color, width: 18, height: 18}} />
                 </div>
               )}
-              <div style={{ ...s.colorPreviewBar, background: storeForm.color }}>
-                <span style={s.colorPreviewLabel}>Store Color</span>
+              <div style={{...s.colorPreviewBar, background: storeForm.color}}>
+                <span style={s.colorPreviewLabel}>{t.storeColor}</span>
                 <span style={s.colorPreviewHex}>{storeForm.color}</span>
               </div>
-              <p style={s.fieldLabel}>Override Color</p>
+              <p style={s.fieldLabel}>{t.overrideColor}</p>
               <div style={s.colorGrid}>
                 {[...FALLBACK_COLORS, ...EXTRA_COLORS].map(c => (
-                  <button key={c} style={{ ...s.colorBtn, background: c, ...(storeForm.color === c ? s.colorBtnActive : {}) }}
+                  <button key={c} style={{...s.colorBtn, background: c, ...(storeForm.color === c ? s.colorBtnActive : {})}}
                     onClick={() => setStoreForm(f => ({ ...f, color: c, autoDetected: false }))} />
                 ))}
               </div>
-              <p style={s.fieldLabel}>Choose Emoji</p>
+              <p style={s.fieldLabel}>{t.chooseEmoji}</p>
               <div style={s.emojiGroupTabs}>
                 {EMOJI_GROUPS.map(g => (
                   <button key={g.label}
-                    style={{ ...s.emojiGroupTab, ...(emojiGroup === g.label ? { background: storeForm.color, color: "#fff" } : {}) }}
+                    style={{...s.emojiGroupTab, ...(emojiGroup === g.label ? {background: storeForm.color, color: "#fff"} : {})}}
                     onClick={() => setEmojiGroup(g.label)}>{g.label}</button>
                 ))}
               </div>
               <div style={s.emojiGrid}>
                 {(EMOJI_GROUPS.find(g => g.label === emojiGroup)?.emojis || []).map(em => (
                   <button key={em}
-                    style={{ ...s.emojiBtn, ...(storeForm.emoji === em ? { ...s.emojiBtnActive, borderColor: storeForm.color, background: storeForm.color + "20" } : {}) }}
+                    style={{...s.emojiBtn, ...(storeForm.emoji === em ? {...s.emojiBtnActive, borderColor: storeForm.color, background: storeForm.color + "20"} : {})}}
                     onClick={() => setStoreForm(f => ({ ...f, emoji: em }))}>{em}</button>
                 ))}
               </div>
               <div style={s.formBtns}>
-                <button style={{ ...s.btn, background: storeForm.color }} onClick={addStore}>{t.addStore}</button>
-                <button style={{ ...s.btn, background: "#e8ede9", color: "#555" }} onClick={() => setView("list")}>{t.cancel}</button>
+                <button style={{...s.btn, background: storeForm.color}} onClick={addStore}>{t.addStore}</button>
+                <button style={{...s.btn, background: "#e8ede9", color: "#555"}} onClick={() => setView("list")}>{t.cancel}</button>
               </div>
             </div>
           )}
 
           {view === "addItem" && (
             <div style={s.panel}>
-              <p style={{ ...s.panelTitle, color: store?.color }}>Add Item — {store?.name}</p>
-              <input style={s.input} {...{placeholder: t.itemName}} value={form.name}
+              <p style={{...s.panelTitle, color: store?.color}}>{t.addItemTo(store?.name)}</p>
+              <input style={s.input} placeholder={t.itemPlaceholder} value={form.name}
                 onChange={e => setForm(f => ({ ...f, name: e.target.value }))} />
-              <input style={s.input} {...{placeholder: t.imageUrl}} value={form.imageUrl}
+              <input style={s.input} placeholder={t.imgPlaceholder} value={form.imageUrl}
                 onChange={e => setForm(f => ({ ...f, imageUrl: e.target.value }))} />
-              <input style={s.input} {...{placeholder: t.price}} value={form.price}
+              <input style={s.input} placeholder={t.pricePlaceholder} value={form.price}
                 onChange={e => setForm(f => ({ ...f, price: e.target.value }))} />
-              <p style={s.fieldLabel}>Category</p>
+              <p style={s.fieldLabel}>{t.category}</p>
               <div style={s.catGrid}>
-                {CATS.map(cat => (
+                {t.cats.map(cat => (
                   <button key={cat}
-                    style={{ ...s.catChip, ...(form.category === cat ? { background: store?.color, color: "#fff", borderColor: store?.color } : {}) }}
+                    style={{...s.catChip, ...(form.category === cat ? {background: store?.color, color: "#fff", borderColor: store?.color} : {})}}
                     onClick={() => setForm(f => ({ ...f, category: cat }))}>{cat}</button>
                 ))}
               </div>
@@ -366,8 +330,8 @@
                 <img src={form.imageUrl} alt="preview" style={s.previewImg} onError={e => e.target.style.display = "none"} />
               )}
               <div style={s.formBtns}>
-                <button style={{ ...s.btn, background: store?.color }} onClick={addItem}>{t.addItem}</button>
-                <button style={{ ...s.btn, background: "#e8ede9", color: "#555" }} onClick={() => setView("list")}>{t.cancel}</button>
+                <button style={{...s.btn, background: store?.color}} onClick={addItem}>{t.addItem}</button>
+                <button style={{...s.btn, background: "#e8ede9", color: "#555"}} onClick={() => setView("list")}>{t.cancel}</button>
               </div>
             </div>
           )}
@@ -375,8 +339,8 @@
           {view === "list" && (
             <div style={s.content}>
               <div style={s.storeSummary}>
-                <div style={{ ...s.storeIconBg, background: (store?.color || "#3D8B6F") + "22" }}>
-                  <span style={{ fontSize: 26 }}>{store?.emoji}</span>
+                <div style={{...s.storeIconBg, background: (store?.color || "#3D8B6F") + "22"}}>
+                  <span style={{fontSize: 26}}>{store?.emoji}</span>
                 </div>
                 <div>
                   <p style={s.storeName}>{store?.name}</p>
@@ -389,23 +353,23 @@
               </div>
               {items.length > 0 && (
                 <div style={s.filterBar}>
-                  {[t.all, ...CATS.filter(c => items.some(i => i.category === c))].map(cat => (
+                  {[t.all, ...t.cats.filter(c => items.some(i => i.category === c))].map(cat => (
                     <button key={cat}
-                      style={{ ...s.filterChip, ...(filterCat === (cat === t.all ? t.all : cat) ? { background: store?.color, color: "#fff", borderColor: store?.color } : {}) }}
-                      onClick={() => setFilterCat(cat)}>{cat}</button>
+                      style={{...s.filterChip, ...(filterCat === (cat === t.all ? "all" : cat) ? {background: store?.color, color: "#fff", borderColor: store?.color} : {})}}
+                      onClick={() => setFilterCat(cat === t.all ? "all" : cat)}>{cat}</button>
                   ))}
                 </div>
               )}
               {items.length === 0 && (
                 <div style={s.empty}>
-                  <div style={{ fontSize: 52, marginBottom: 12 }}>🛒</div>
-                  <p style={s.emptyTitle}>Your list is empty</p>
-                  <p style={s.emptySub}>Tap + to add your first item</p>
+                  <div style={{fontSize: 52, marginBottom: 12}}>🛒</div>
+                  <p style={s.emptyTitle}>{t.emptyTitle}</p>
+                  <p style={s.emptySub}>{t.emptySub}</p>
                 </div>
               )}
               {Object.entries(groupedUnchecked).map(([cat, catItems]) => (
                 <div key={cat} style={s.group}>
-                  <p style={{ ...s.groupLabel, color: store?.color }}>{cat}</p>
+                  <p style={{...s.groupLabel, color: store?.color}}>{cat}</p>
                   {catItems.map(item => (
                     <ItemCard key={item.id} item={item} storeColor={store?.color}
                       imgErrors={imgErrors} setImgErrors={setImgErrors}
@@ -415,7 +379,7 @@
               ))}
               {checked.length > 0 && (
                 <div style={s.group}>
-                  <p style={{ ...s.groupLabel, color: "#bbb" }}>✅ Done ({checked.length})</p>
+                  <p style={{...s.groupLabel, color: "#bbb"}}>{"✅ " + t.done + " (" + checked.length + ")"}</p>
                   {checked.map(item => (
                     <ItemCard key={item.id} item={item} storeColor={store?.color}
                       imgErrors={imgErrors} setImgErrors={setImgErrors}
@@ -427,7 +391,7 @@
           )}
 
           {view === "list" && (
-            <button style={{ ...s.fab, background: store?.color }} onClick={() => setView("addItem")}>+</button>
+            <button style={{...s.fab, background: store?.color}} onClick={() => setView("addItem")}>+</button>
           )}
         </div>
       );
@@ -435,7 +399,7 @@
 
     function ItemCard({ item, storeColor, imgErrors, setImgErrors, onToggle, onDelete, dimmed }) {
       return (
-        <div style={{ ...s.card, opacity: dimmed ? 0.4 : 1 }}>
+        <div style={{...s.card, opacity: dimmed ? 0.4 : 1}}>
           {item.imageUrl && !imgErrors[item.id] ? (
             <img src={item.imageUrl} alt={item.name} style={s.cardImg}
               onError={() => setImgErrors(e => ({ ...e, [item.id]: true }))} />
@@ -443,14 +407,14 @@
             <div style={s.cardImgPlaceholder}>🛒</div>
           )}
           <div style={s.cardInfo}>
-            <p style={{ ...s.cardName, textDecoration: dimmed ? "line-through" : "none" }}>{item.name}</p>
-            <div style={{ display: "flex", gap: 6, alignItems: "center", flexWrap: "wrap", marginTop: 4 }}>
+            <p style={{...s.cardName, textDecoration: dimmed ? "line-through" : "none"}}>{item.name}</p>
+            <div style={{display: "flex", gap: 6, alignItems: "center", flexWrap: "wrap", marginTop: 4}}>
               <span style={s.cardCat}>{item.category}</span>
               {item.price && <span style={s.cardPrice}>{item.price}</span>}
             </div>
           </div>
           <div style={s.cardActions}>
-            <button style={{ ...s.checkBtn, borderColor: storeColor, color: dimmed ? storeColor : "#ccc" }}
+            <button style={{...s.checkBtn, borderColor: storeColor, color: dimmed ? storeColor : "#ccc"}}
               onClick={() => onToggle(item.id)}>{dimmed ? "✓" : "○"}</button>
             <button style={s.delBtn} onClick={() => onDelete(item.id)}>🗑️</button>
           </div>
