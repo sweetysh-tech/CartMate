@@ -211,6 +211,9 @@
       const [imgErrors, setImgErrors] = useState({});
       const [deleteStoreId, setDeleteStoreId] = useState(null);
       const [lang, setLang] = useState(() => load(LANG_KEY, "en"));
+      const [editingStore, setEditingStore] = useState(null);
+      const [editingItem, setEditingItem] = useState(null);
+      const [editEmojiGroup, setEditEmojiGroup] = useState("Stores");
       const t = lang === "en" ? EN : KO;
       const store = stores.find(s => s.id === activeStore) || stores[0];
       const items = allItems[activeStore] || [];
@@ -218,6 +221,23 @@
       useEffect(() => { save(STORES_KEY, stores); }, [stores]);
       useEffect(() => { save(LANG_KEY, lang); }, [lang]);
       function getCatName(catId) { return t.catNames[catId] || catId; }
+      function saveStoreEdit() {
+        if (!editingStore || !editingStore.name.trim()) return;
+        setStores(prev => prev.map(s => s.id === editingStore.id
+          ? { ...s, name: editingStore.name.trim(), emoji: editingStore.emoji, color: editingStore.color }
+          : s));
+        setEditingStore(null);
+      }
+      function saveItemEdit() {
+        if (!editingItem || !editingItem.name.trim()) return;
+        setAllItems(prev => ({
+          ...prev,
+          [activeStore]: prev[activeStore].map(i => i.id === editingItem.id
+            ? { ...i, name: editingItem.name.trim(), price: editingItem.price, categoryId: editingItem.categoryId }
+            : i)
+        }));
+        setEditingItem(null);
+      }
       function handleStoreNameChange(name) {
         const detected = detectBrand(name);
         if (detected) { setStoreForm(f => ({ ...f, name, color: detected.color, emoji: detected.emoji, autoDetected: true })); }
@@ -308,19 +328,51 @@
             <div style={s.panel}>
               <p style={s.panelTitle}>{t.manageStores}</p>
               {stores.map(st => (
-                <div key={st.id} style={s.storeRow}>
-                  <span style={{fontSize: 22}}>{st.emoji}</span>
-                  <span style={{flex: 1, fontWeight: 600, color: "#1a2e24"}}>{st.name}</span>
-                  <span style={{...s.colorDot, background: st.color}} />
-                  {stores.length > 1 && (
-                    deleteStoreId === st.id ? (
-                      <div style={{display: "flex", gap: 6}}>
-                        <button style={{...s.smallBtn, background: "#e57373", color: "#fff"}} onClick={() => deleteStore(st.id)}>{t.del}</button>
-                        <button style={{...s.smallBtn, background: "#eee", color: "#555"}} onClick={() => setDeleteStoreId(null)}>{t.cancel}</button>
+                <div key={st.id} style={{borderBottom: "1px solid #f0f5f2", paddingBottom: 10, marginBottom: 10}}>
+                  {editingStore?.id === st.id ? (
+                    <div>
+                      <input style={{...s.input, marginBottom: 8}} value={editingStore.name}
+                        onChange={e => setEditingStore(es => ({...es, name: e.target.value}))} />
+                      <div style={{display:"flex", flexWrap:"wrap", gap:6, marginBottom:8}}>
+                        {[...FALLBACK_COLORS,...EXTRA_COLORS].map(c => (
+                          <button key={c} style={{width:24,height:24,borderRadius:"50%",border:editingStore.color===c?"3px solid #1a2e24":"3px solid transparent",background:c,cursor:"pointer"}}
+                            onClick={() => setEditingStore(es => ({...es, color:c}))} />
+                        ))}
                       </div>
-                    ) : (
-                      <button style={{...s.smallBtn, background: "#fce8e8", color: "#c0392b"}} onClick={() => setDeleteStoreId(st.id)}>🗑️ {t.remove}</button>
-                    )
+                      <div style={{display:"flex", gap:4, flexWrap:"wrap", marginBottom:6}}>
+                        {EMOJI_GROUPS.map(g => (
+                          <button key={g.label} style={{...s.emojiGroupTab,...(editEmojiGroup===g.label?{background:editingStore.color,color:"#fff"}:{})}}
+                            onClick={() => setEditEmojiGroup(g.label)}>{g.label}</button>
+                        ))}
+                      </div>
+                      <div style={{display:"flex", flexWrap:"wrap", gap:6, marginBottom:10}}>
+                        {(EMOJI_GROUPS.find(g=>g.label===editEmojiGroup)?.emojis||[]).map(em => (
+                          <button key={em} style={{...s.emojiBtn,...(editingStore.emoji===em?{...s.emojiBtnActive,borderColor:editingStore.color,background:editingStore.color+"20"}:{})}}
+                            onClick={() => setEditingStore(es => ({...es, emoji:em}))}>{em}</button>
+                        ))}
+                      </div>
+                      <div style={{display:"flex", gap:8}}>
+                        <button style={{...s.smallBtn, background:editingStore.color, color:"#fff", padding:"7px 14px"}} onClick={saveStoreEdit}>Save</button>
+                        <button style={{...s.smallBtn, background:"#eee", color:"#555", padding:"7px 14px"}} onClick={() => setEditingStore(null)}>{t.cancel}</button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div style={{display:"flex", alignItems:"center", gap:10}}>
+                      <span style={{fontSize: 22}}>{st.emoji}</span>
+                      <span style={{flex: 1, fontWeight: 600, color: "#1a2e24"}}>{st.name}</span>
+                      <span style={{...s.colorDot, background: st.color}} />
+                      <button style={{...s.smallBtn, background:"#e8f5ee", color:"#3D8B6F"}} onClick={() => setEditingStore({...st})}>✏️</button>
+                      {stores.length > 1 && (
+                        deleteStoreId === st.id ? (
+                          <div style={{display: "flex", gap: 6}}>
+                            <button style={{...s.smallBtn, background: "#e57373", color: "#fff"}} onClick={() => deleteStore(st.id)}>{t.del}</button>
+                            <button style={{...s.smallBtn, background: "#eee", color: "#555"}} onClick={() => setDeleteStoreId(null)}>{t.cancel}</button>
+                          </div>
+                        ) : (
+                          <button style={{...s.smallBtn, background: "#fce8e8", color: "#c0392b"}} onClick={() => setDeleteStoreId(st.id)}>🗑️</button>
+                        )
+                      )}
+                    </div>
                   )}
                 </div>
               ))}
@@ -439,7 +491,7 @@
                   {catItems.map(item => (
                     <ItemCard key={item.id} item={item} storeColor={store?.color}
                       imgErrors={imgErrors} setImgErrors={setImgErrors}
-                      onToggle={toggleItem} onDelete={deleteItem} />
+                      onToggle={toggleItem} onDelete={deleteItem} onEdit={(item) => setEditingItem({...item})} />
                   ))}
                 </div>
               ))}
@@ -449,10 +501,33 @@
                   {checked.map(item => (
                     <ItemCard key={item.id} item={item} storeColor={store?.color}
                       imgErrors={imgErrors} setImgErrors={setImgErrors}
-                      onToggle={toggleItem} onDelete={deleteItem} dimmed />
+                      onToggle={toggleItem} onDelete={deleteItem} onEdit={(item) => setEditingItem({...item})} dimmed />
                   ))}
                 </div>
               )}
+            </div>
+          )}
+          {editingItem && (
+            <div style={{position:"fixed",top:0,left:0,right:0,bottom:0,background:"rgba(0,0,0,0.5)",zIndex:200,display:"flex",alignItems:"flex-end",justifyContent:"center"}}>
+              <div style={{background:"#fff",borderRadius:"20px 20px 0 0",padding:24,width:"100%",maxWidth:480,boxSizing:"border-box"}}>
+                <p style={{margin:"0 0 16px",fontSize:16,fontWeight:800,color:"#1a2e24"}}>✏️ Edit Item</p>
+                <input style={s.input} value={editingItem.name}
+                  onChange={e => setEditingItem(ei => ({...ei, name: e.target.value}))} />
+                <input style={s.input} placeholder="Price (optional)" value={editingItem.price || ""}
+                  onChange={e => setEditingItem(ei => ({...ei, price: e.target.value}))} />
+                <p style={s.fieldLabel}>{t.category}</p>
+                <div style={{...s.catGrid, marginBottom:16}}>
+                  {CAT_IDS.map(catId => (
+                    <button key={catId}
+                      style={{...s.catChip,...(editingItem.categoryId===catId?{background:store?.color,color:"#fff",borderColor:store?.color}:{})}}
+                      onClick={() => setEditingItem(ei => ({...ei, categoryId: catId}))}>{getCatName(catId)}</button>
+                  ))}
+                </div>
+                <div style={{display:"flex",gap:10}}>
+                  <button style={{...s.btn, background:store?.color}} onClick={saveItemEdit}>Save</button>
+                  <button style={{...s.btn, background:"#e8ede9", color:"#555"}} onClick={() => setEditingItem(null)}>{t.cancel}</button>
+                </div>
+              </div>
             </div>
           )}
           {view === "list" && (
@@ -462,7 +537,7 @@
       );
     }
 
-    function ItemCard({ item, storeColor, imgErrors, setImgErrors, onToggle, onDelete, dimmed }) {
+    function ItemCard({ item, storeColor, imgErrors, setImgErrors, onToggle, onDelete, onEdit, dimmed }) {
       return (
         <div style={{...s.card, opacity: dimmed ? 0.4 : 1}}>
           {item.imageUrl && !imgErrors[item.id] ? (
@@ -478,6 +553,7 @@
           <div style={s.cardActions}>
             <button style={{...s.checkBtn, borderColor: storeColor, color: dimmed ? storeColor : "#ccc"}}
               onClick={() => onToggle(item.id)}>{dimmed ? "✓" : "○"}</button>
+            {!dimmed && <button style={{...s.delBtn, opacity:0.5, fontSize:13}} onClick={() => onEdit(item)}>✏️</button>}
             <button style={s.delBtn} onClick={() => onDelete(item.id)}>🗑️</button>
           </div>
         </div>
@@ -494,7 +570,7 @@
       appTagline: { fontSize: 11, color: "#7aab8e", marginTop: 1, fontWeight: 500 },
       manageBtn: { background: "#e8f5ee", border: "none", color: "#3D8B6F", borderRadius: 20, padding: "7px 14px", fontSize: 12, fontWeight: 700, cursor: "pointer" },
       tabScroll: { display: "flex", gap: 2, overflowX: "auto" },
-      tab: { display: "flex", flexDirection: "column", alignItems: "center", gap: 2, padding: "8px 14px 10px", background: "transparent", border: "none", borderBottom: "3px solid transparent", color: "#aac4b0", cursor: "pointer", fontSize: 11, fontWeight: 600, whiteSpace: "nowrap", position: "relative", minWidth: 64 },
+      tab: { display: "flex", flexDirection: "column", alignItems: "center", gap: 2, padding: "8px 12px 10px", background: "transparent", border: "none", borderBottom: "3px solid transparent", color: "#aac4b0", cursor: "pointer", fontSize: 11, fontWeight: 600, whiteSpace: "nowrap", position: "relative", flexShrink: 0, minWidth: 60 },
       tabActive: { color: "#1a2e24" },
       tabLabel: { fontSize: 10 },
       tabBadge: { position: "absolute", top: 4, right: 6, color: "#fff", borderRadius: 10, fontSize: 9, fontWeight: 800, padding: "1px 5px" },
